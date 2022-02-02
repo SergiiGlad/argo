@@ -11,9 +11,9 @@ data "terraform_remote_state" "gke" {
   backend = "remote"
 
   config = {
-    organization = "wabbit-dev"
+    organization = "spd"
     workspaces = {
-      name = "wabbit-rk5-gke"
+      name = "argo"
     }
   }
 }

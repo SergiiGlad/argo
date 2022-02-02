@@ -44,7 +44,7 @@ variable "subnetwork_ipv4_cidr_range" {
 
 variable "ip_range_pods_name" {
   description = "The secondary ip range to use for pods"
-  default     = "10.100.0.0/14"
+  default     = "ip-range-pods"
 }
 
 variable "pod_ipv4_cidr_range" {

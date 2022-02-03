@@ -1,6 +1,8 @@
 # sample-gke-terraform
 sample gke cluster for play and fun
 
+https://awstip.com/setting-up-gke-with-terraform-cloud-bf9dfb5d1c8b
+
 # Simple Regional Cluster
 
 Simple GKE cluster with output of `kubeconfig`

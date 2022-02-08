@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: dispatcher-app-ingress
-  namespace: hca-supervisor-stg
+  namespace: dispatch
 spec:
   rules:
     - http:
@@ -16,7 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dispatcher-app
-  namespace: hca-supervisor-stg
+  namespace: dispatch
   labels:
     run: api
     type: iap-srv
@@ -36,7 +36,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dispatcher-app-deployment
-  namespace: hca-supervisor-stg
+  namespace: dispatch
 spec:
   revisionHistoryLimit: 1
   replicas: 1

@@ -1,0 +1,88 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: dispatcher-app-ingress
+  namespace: hca-supervisor-stg
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: dispatcher-app
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dispatcher-app
+  namespace: hca-supervisor-stg
+  labels:
+    run: api
+    type: iap-srv
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: dispatcher-app
+  type: ClusterIP
+---
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatcher-app-deployment
+  namespace: hca-supervisor-stg
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatcher-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  template:
+    metadata:
+      labels:
+        app: dispatcher-app
+    spec:
+      terminationGracePeriodSeconds: 400
+      containers:
+        - name: dispatcher-app
+          imagePullPolicy: Always
+          image: gcr.io/teck-dev-haulcycle1-mckinsey/dispatcher:3.2.239148-dev
+          env:
+            - name: SITE_HOST
+              value: "http://supervisor-site"
+            - name: KPI_HOST
+              value: "http://supervisor-kpi"
+            - name: PRIORITY_HOST
+              value: "http://supervisor-priority"
+            - name: USER_HOST
+              value: "http://supervisor-user"
+          ports:
+            - containerPort: 3000
+          livenessProbe: # Used by deployment controller
+            httpGet:
+              path: /ping
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            limits:
+              memory: 1024Mi
+            requests:
+              memory: 256Mi  

@@ -73,16 +73,21 @@ spec:
     app: dispatcher-app
   type: ClusterIP
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: dispatcher-app-ingress
   namespace: dispatch
 spec:
+  ingressClassName: nginx-example
   rules:
-    - http:
-        paths:
-          - backend:
-              serviceName: dispatcher-app
-              servicePort: 80
+  - http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: dispatcher-app
+            port:
+              number: 80
+
 

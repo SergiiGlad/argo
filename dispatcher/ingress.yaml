@@ -24,7 +24,7 @@ spec:
       containers:
         - name: dispatcher-app
           imagePullPolicy: Always
-          image: gcr.io/teck-dev-haulcycle1-mckinsey/dispatcher:3.2.239148-dev
+          image: gcr.io/peerless-trees-333620/dispatcher:3.2.239148-dev
           env:
             - name: SITE_HOST
               value: "http://supervisor-site"
